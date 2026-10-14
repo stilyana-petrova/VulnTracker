@@ -122,6 +122,14 @@ clearFilters.addEventListener('click', () => {
   search.focus();
 });
 
+document.querySelectorAll('[data-severity-filter]').forEach(button => {
+  button.addEventListener('click', () => {
+    severityFilter.value = button.dataset.severityFilter;
+    renderRows();
+    document.querySelector('#findings').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
 rows.addEventListener('click', event => {
   const button = event.target.closest('[data-id]');
   if (button) showDetails(button.dataset.id);
