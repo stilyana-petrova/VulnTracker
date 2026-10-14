@@ -42,7 +42,7 @@ The prototype is a static frontend and requires no package installation, build s
 
 ## Jira and GitHub workflow
 
-The Jira backlog documents the work items created for this project. The Jira space is named **VulnTracker** and currently uses the key KAN; changing the display name does not change Jira issue keys. The backlog includes two epics, eight estimated user stories, three technical tasks, two bugs, and a story split into three subtasks. The In Progress column has a maximum WIP limit of two work items.
+The Jira backlog documents the work items created for this project. The Jira space is named **VulnTracker** and currently uses the key KAN; changing the display name does not change Jira issue keys. The backlog includes two epics, nine estimated user stories, three technical tasks, two bugs, and a story split into three subtasks. The In Progress column has a maximum WIP limit of two work items.
 
 Use the Jira issue key in each development branch, commit message, and pull request title. For example: KAN-7-view-vulnerability-register and KAN-7 Add finding table.
 
@@ -54,7 +54,7 @@ For each change:
 4. Open a pull request whose title includes the same Jira key.
 5. Merge the pull request and move the Jira issue to **Done**.
 
-After the initial repository commit, merge changes into main through pull requests. GitHub for Atlassian is connected to the Jira site. Use issue keys in branch names, commit messages, and pull request titles so the work can be linked back to Jira.
+Keep changes to main behind pull requests. Use a pull request for every ticket so the work is reviewed and linked to its Jira issue. GitHub for Atlassian is connected to the Jira site. Use issue keys in branch names, commit messages, and pull request titles so the work can be linked back to Jira.
 
 ## Scope and limitations
 
