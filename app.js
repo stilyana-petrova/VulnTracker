@@ -68,13 +68,20 @@ function updateDashboard() {
   });
 }
 
+function matchesSelectedValue(actual, selected) {
+  if (selected === 'all') return true;
+  return String(actual ?? '').trim().toLocaleLowerCase() === String(selected ?? '').trim().toLocaleLowerCase();
+}
+
 function renderRows() {
   const query = search.value.trim().toLowerCase();
   const severity = severityFilter.value;
   const status = statusFilter.value;
   const visible = findings.filter(item => {
     const searchable = `${item.id} ${item.title} ${item.asset} ${item.owner} ${item.description} ${item.notes}`.toLowerCase();
-    return searchable.includes(query) && (severity === 'all' || item.severity === severity) && (status === 'all' || item.status === status);
+    const matchesSeverity = matchesSelectedValue(item.severity, severity);
+    const matchesStatus = matchesSelectedValue(item.status, status);
+    return searchable.includes(query) && matchesSeverity && matchesStatus;
   });
 
   rows.innerHTML = visible.length ? visible.map(item => `
