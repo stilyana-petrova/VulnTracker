@@ -84,7 +84,7 @@
         <label>Status<select name="status" required><option selected>Open</option><option>In progress</option><option>Resolved</option></select></label>
         <label>Owner<input name="owner" type="text" maxlength="80" placeholder="Unassigned"></label>
         <label>Due date<input name="due" type="date"></label>
-        <label class="full-width">Description<textarea name="description" rows="4" maxlength="2000" placeholder="Describe the finding and recommended remediation"></textarea></label>
+        <label class="full-width">Description<textarea name="description" rows="4" required maxlength="2000" placeholder="Describe the finding and recommended remediation"></textarea></label>
         <label class="full-width">Suggested remediation<textarea name="remediation" rows="3" maxlength="2000" placeholder="Describe a practical remediation action"></textarea></label>
       </div>
       <div class="dialog-actions"><button class="secondary-button" type="button" onclick="this.closest('dialog').close()">Cancel</button><button class="primary-button" type="submit">Save finding</button></div>

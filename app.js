@@ -151,19 +151,29 @@ document.querySelector('#detail-form').addEventListener('submit', event => {
 });
 
 document.querySelector('#add-button').addEventListener('click', () => addDialog.showModal());
-document.querySelector('#add-form').addEventListener('submit', event => {
+const addForm = document.querySelector('#add-form');
+const requiredFindingFields = ['title', 'asset', 'description'].map(name => addForm.elements.namedItem(name));
+requiredFindingFields.forEach(field => field.addEventListener('input', () => field.setCustomValidity('')));
+
+addForm.addEventListener('submit', event => {
   event.preventDefault();
   const form = event.currentTarget;
   const data = new FormData(form);
+  const title = String(data.get('title')).trim();
+  const asset = String(data.get('asset')).trim();
+  const description = String(data.get('description')).trim();
+  const normalizedValues = [title, asset, description];
+  requiredFindingFields.forEach((field, index) => field.setCustomValidity(normalizedValues[index] ? '' : 'This field cannot be blank.'));
+  if (!form.reportValidity()) return;
   findings.unshift({
     id: nextFindingId(),
-    title: String(data.get('title')).trim(),
-    asset: String(data.get('asset')).trim(),
+    title,
+    asset,
     severity: String(data.get('severity')),
     status: String(data.get('status')),
     owner: String(data.get('owner')).trim() || 'Unassigned',
     due: String(data.get('due')),
-    description: String(data.get('description')).trim(),
+    description,
     remediation: String(data.get('remediation')).trim(),
     notes: '',
     updated: todayDate()
