@@ -18,14 +18,24 @@ const detailDialog = document.querySelector('#detail-dialog');
 const addDialog = document.querySelector('#add-dialog');
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
+function todayDate() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function loadFindings() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (Array.isArray(saved) && saved.every(item => item && item.id && item.title && item.severity && item.status)) return saved;
+    if (Array.isArray(saved) && saved.every(item => item && item.id && item.title && item.severity && item.status)) {
+      return saved.map(item => ({ ...item, updated: item.updated || todayDate() }));
+    }
   } catch (error) {
     console.warn('Saved findings could not be read; using the sample records.', error);
   }
-  return starterFindings.map(item => ({ ...item }));
+  return starterFindings.map(item => ({ ...item, updated: todayDate() }));
 }
 
 let findings = loadFindings();
@@ -68,8 +78,9 @@ function renderRows() {
       <td><span class="status status-${escapeHtml(item.status.toLowerCase().replaceAll(' ', '-'))}">${escapeHtml(item.status)}</span></td>
       <td><span class="owner">${escapeHtml(item.owner || 'Unassigned')}</span></td>
       <td>${escapeHtml(formatDate(item.due))}</td>
+      <td>${escapeHtml(formatDate(item.updated))}</td>
       <td><button class="row-menu" data-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)} details">···</button></td>
-    </tr>`).join('') : '<tr><td colspan="7" class="empty-state">No findings match these filters.</td></tr>';
+    </tr>`).join('') : '<tr><td colspan="8" class="empty-state">No findings match these filters.</td></tr>';
 
   document.querySelector('#result-count').textContent = `Showing ${visible.length} of ${findings.length} findings`;
 }
@@ -113,6 +124,7 @@ document.querySelector('#detail-form').addEventListener('submit', event => {
   item.owner = document.querySelector('#detail-owner').value.trim() || 'Unassigned';
   item.due = document.querySelector('#detail-due').value;
   item.notes = document.querySelector('#detail-notes').value.trim();
+  item.updated = todayDate();
   saveFindings();
   updateDashboard();
   renderRows();
@@ -133,7 +145,8 @@ document.querySelector('#add-form').addEventListener('submit', event => {
     owner: String(data.get('owner')).trim() || 'Unassigned',
     due: String(data.get('due')),
     description: String(data.get('description')).trim(),
-    notes: ''
+    notes: '',
+    updated: todayDate()
   });
   saveFindings();
   updateDashboard();
@@ -147,8 +160,8 @@ document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('c
 }));
 
 document.querySelector('#export-button').addEventListener('click', () => {
-  const headings = ['ID', 'Finding', 'Asset', 'Severity', 'Status', 'Owner', 'Due date', 'Description', 'Notes'];
-  const csv = [headings, ...findings.map(item => [item.id, item.title, item.asset, item.severity, item.status, item.owner, formatDate(item.due), item.description, item.notes])]
+  const headings = ['ID', 'Finding', 'Asset', 'Severity', 'Status', 'Owner', 'Due date', 'Last updated', 'Description', 'Notes'];
+  const csv = [headings, ...findings.map(item => [item.id, item.title, item.asset, item.severity, item.status, item.owner, formatDate(item.due), formatDate(item.updated), item.description, item.notes])]
     .map(line => line.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(',')).join('\r\n');
   const link = document.createElement('a');
   const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
