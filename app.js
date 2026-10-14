@@ -78,7 +78,7 @@ function renderRows() {
       <td><span class="severity severity-${escapeHtml(item.severity.toLowerCase())}">${escapeHtml(item.severity)}</span></td>
       <td><button class="status status-${escapeHtml(item.status.toLowerCase().replaceAll(' ', '-'))}" data-id="${escapeHtml(item.id)}" aria-label="Update status for ${escapeHtml(item.title)}">${escapeHtml(item.status)}</button></td>
       <td><span class="owner">${escapeHtml(item.owner || 'Unassigned')}</span></td>
-      <td>${escapeHtml(formatDate(item.due))}</td>
+      <td class="${item.due && item.due < todayDate() && item.status !== 'Resolved' ? 'due-overdue' : ''}">${escapeHtml(formatDate(item.due))}${item.due && item.due < todayDate() && item.status !== 'Resolved' ? '<span class="overdue-label">Overdue</span>' : ''}</td>
       <td>${escapeHtml(formatDate(item.updated))}</td>
       <td><button class="row-menu" data-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)} details">···</button></td>
     </tr>`).join('') : '<tr><td colspan="8" class="empty-state">No findings match these filters.</td></tr>';
