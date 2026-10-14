@@ -17,6 +17,8 @@ const statusFilter = document.querySelector('#status-filter');
 const clearFilters = document.querySelector('#clear-filters');
 const detailDialog = document.querySelector('#detail-dialog');
 const addDialog = document.querySelector('#add-dialog');
+const detailNotes = document.querySelector('#detail-notes');
+const notesCount = document.querySelector('#notes-count');
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
 function todayDate() {
@@ -25,6 +27,10 @@ function todayDate() {
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function updateNotesCount() {
+  notesCount.textContent = `${detailNotes.value.length} / 2000 characters`;
 }
 
 function loadFindings() {
@@ -99,10 +105,13 @@ function showDetails(id) {
   document.querySelector('#detail-asset').textContent = item.asset;
   document.querySelector('#detail-owner').value = item.owner === 'Unassigned' ? '' : item.owner;
   document.querySelector('#detail-due').value = item.due || '';
-  document.querySelector('#detail-notes').value = item.notes || '';
+  detailNotes.value = item.notes || '';
+  updateNotesCount();
   detailDialog.dataset.findingId = item.id;
   detailDialog.showModal();
 }
+
+detailNotes.addEventListener('input', updateNotesCount);
 
 function nextFindingId() {
   const highest = findings.reduce((max, item) => {
