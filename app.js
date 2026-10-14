@@ -14,6 +14,7 @@ const rows = document.querySelector('#finding-rows');
 const search = document.querySelector('#search');
 const severityFilter = document.querySelector('#severity-filter');
 const statusFilter = document.querySelector('#status-filter');
+const clearFilters = document.querySelector('#clear-filters');
 const detailDialog = document.querySelector('#detail-dialog');
 const addDialog = document.querySelector('#add-dialog');
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
@@ -83,6 +84,7 @@ function renderRows() {
     </tr>`).join('') : '<tr><td colspan="8" class="empty-state">No findings match these filters.</td></tr>';
 
   document.querySelector('#result-count').textContent = `Showing ${visible.length} of ${findings.length} findings`;
+  clearFilters.disabled = !search.value && severity === 'all' && status === 'all';
 }
 
 function showDetails(id) {
@@ -109,7 +111,15 @@ function nextFindingId() {
   return `VT-${String(highest + 1).padStart(3, '0')}`;
 }
 
-[search, severityFilter, statusFilter].forEach(control => control.addEventListener('input', renderRows));
+search.addEventListener('input', renderRows);
+[severityFilter, statusFilter].forEach(control => control.addEventListener('change', renderRows));
+clearFilters.addEventListener('click', () => {
+  search.value = '';
+  severityFilter.value = 'all';
+  statusFilter.value = 'all';
+  renderRows();
+  search.focus();
+});
 
 rows.addEventListener('click', event => {
   const button = event.target.closest('[data-id]');
