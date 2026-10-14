@@ -76,7 +76,7 @@ function renderRows() {
       <td><div class="finding-name">${escapeHtml(item.title)}</div><div class="finding-id">${escapeHtml(item.id)}</div></td>
       <td><span class="asset-name">${escapeHtml(item.asset)}</span></td>
       <td><span class="severity severity-${escapeHtml(item.severity.toLowerCase())}">${escapeHtml(item.severity)}</span></td>
-      <td><span class="status status-${escapeHtml(item.status.toLowerCase().replaceAll(' ', '-'))}">${escapeHtml(item.status)}</span></td>
+      <td><button class="status status-${escapeHtml(item.status.toLowerCase().replaceAll(' ', '-'))}" data-id="${escapeHtml(item.id)}" aria-label="Update status for ${escapeHtml(item.title)}">${escapeHtml(item.status)}</button></td>
       <td><span class="owner">${escapeHtml(item.owner || 'Unassigned')}</span></td>
       <td>${escapeHtml(formatDate(item.due))}</td>
       <td>${escapeHtml(formatDate(item.updated))}</td>
