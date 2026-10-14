@@ -54,7 +54,7 @@ function formatDate(value) {
 function updateDashboard() {
   document.querySelector('#total-count').textContent = findings.length;
   document.querySelector('#nav-count').textContent = findings.length;
-  document.querySelector('#critical-count').textContent = findings.filter(item => item.severity === 'Critical' && item.status !== 'Resolved').length;
+  document.querySelector('#open-count').textContent = findings.filter(item => item.status === 'Open').length;
   document.querySelector('#progress-count').textContent = findings.filter(item => item.status === 'In progress').length;
   document.querySelector('#resolved-count').textContent = findings.filter(item => item.status === 'Resolved').length;
   document.querySelectorAll('[data-severity-count]').forEach(element => {
