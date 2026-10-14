@@ -9,6 +9,7 @@
 
 /* Keep the field labels visible while scrolling through a long findings register. */
 .table-scroll thead th{position:sticky;top:0;z-index:1;background:#fafbfc}
+.empty-state-action{display:block;margin:10px auto 0;padding:8px 12px;border:1px solid #4263eb;border-radius:6px;background:#4263eb;color:#fff;font:600 11px 'DM Sans',sans-serif;cursor:pointer}.empty-state-action:hover{background:#344fc8}.empty-state-action:focus-visible{outline:2px solid #4263eb;outline-offset:3px}
 .status{border:0;cursor:pointer;font:600 9px 'DM Sans',sans-serif}.status:focus-visible{outline:2px solid #4263eb;outline-offset:2px}
 .due-overdue{color:#bd3d3d;font-weight:600}.overdue-label{display:inline-block;margin-left:6px;padding:3px 6px;border-radius:9px;background:#fff0f0;color:#bd3d3d;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
 .field-hint{font-size:9px;font-weight:400;color:#909aa8;text-align:right}

@@ -95,7 +95,9 @@ function renderRows() {
       <td class="${item.due && item.due < todayDate() && item.status !== 'Resolved' ? 'due-overdue' : ''}">${escapeHtml(formatDate(item.due))}${item.due && item.due < todayDate() && item.status !== 'Resolved' ? '<span class="overdue-label">Overdue</span>' : ''}</td>
       <td>${escapeHtml(formatDate(item.updated))}</td>
       <td><button class="row-menu" data-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)} details">···</button></td>
-    </tr>`).join('') : '<tr><td colspan="8" class="empty-state">No findings match these filters.</td></tr>';
+    </tr>`).join('') : findings.length === 0
+    ? '<tr><td colspan="8" class="empty-state">No vulnerabilities yet. Add your first finding to start the register.<button class="empty-state-action" type="button" data-add-first-finding>Add a finding</button></td></tr>'
+    : '<tr><td colspan="8" class="empty-state">No findings match these filters.</td></tr>';
 
   document.querySelector('#result-count').textContent = `Showing ${visible.length} of ${findings.length} findings`;
   clearFilters.disabled = !search.value && severity === 'all' && status === 'all';
@@ -148,6 +150,10 @@ document.querySelectorAll('[data-severity-filter]').forEach(button => {
 });
 
 rows.addEventListener('click', event => {
+  if (event.target.closest('[data-add-first-finding]')) {
+    addDialog.showModal();
+    return;
+  }
   const button = event.target.closest('[data-id]');
   if (button) showDetails(button.dataset.id);
 });
