@@ -1,13 +1,13 @@
 const STORAGE_KEY = 'vulntracker.findings.v1';
 
 const starterFindings = [
-  { id: 'VT-001', title: 'Outdated OpenSSL library', asset: 'api-gateway-01', severity: 'Critical', status: 'Open', owner: 'Maya Chen', due: '2026-10-14', description: 'The API gateway uses an OpenSSL version with a known remote code execution vulnerability. Upgrade to a supported release and verify the service after deployment.', notes: '' },
-  { id: 'VT-002', title: 'SQL injection in search endpoint', asset: 'customer-portal', severity: 'High', status: 'In progress', owner: 'Ivan Petrov', due: '2026-10-16', description: 'An input validation issue may allow crafted search parameters to reach a database query. Use parameterized queries and add a regression check.', notes: '' },
-  { id: 'VT-003', title: 'Missing security headers', asset: 'marketing-site', severity: 'Medium', status: 'Open', owner: 'Unassigned', due: '2026-10-20', description: 'Several recommended browser security headers are not configured. Review the deployment configuration and add the agreed headers.', notes: '' },
-  { id: 'VT-004', title: 'Public storage bucket permissions', asset: 'backup-storage', severity: 'High', status: 'In progress', owner: 'Elena Markova', due: '2026-10-13', description: 'Storage permissions allow broader access than required. Restrict access to approved service identities and review access logs.', notes: '' },
-  { id: 'VT-005', title: 'Weak TLS configuration', asset: 'vpn-edge-02', severity: 'Medium', status: 'Resolved', owner: 'Maya Chen', due: '2026-10-09', description: 'The service accepted outdated TLS settings. The configuration has been updated; confirm it remains compliant during routine review.', notes: '' },
-  { id: 'VT-006', title: 'Unpatched Linux kernel', asset: 'worker-node-07', severity: 'Critical', status: 'Open', owner: 'Ivan Petrov', due: '2026-10-15', description: 'A security update is available for the kernel running on this worker node. Apply the patch during the approved maintenance window.', notes: '' },
-  { id: 'VT-007', title: 'Verbose error messages', asset: 'internal-dashboard', severity: 'Low', status: 'Resolved', owner: 'Elena Markova', due: '2026-10-08', description: 'Error responses exposed implementation details. Generic responses have been enabled and the change is marked resolved.', notes: '' }
+  { id: 'VT-001', title: 'Outdated OpenSSL library', asset: 'api-gateway-01', severity: 'Critical', status: 'Open', owner: 'Maya Chen', due: '2026-10-14', description: 'The API gateway uses an OpenSSL version with a known remote code execution vulnerability.', remediation: 'Upgrade OpenSSL to a supported release, deploy through staging, and verify the gateway after rollout.', notes: '' },
+  { id: 'VT-002', title: 'SQL injection in search endpoint', asset: 'customer-portal', severity: 'High', status: 'In progress', owner: 'Ivan Petrov', due: '2026-10-16', description: 'Crafted search parameters may reach a database query without safe handling.', remediation: 'Use parameterized queries, validate input on the server, and add a regression check for the affected endpoint.', notes: '' },
+  { id: 'VT-003', title: 'Missing security headers', asset: 'marketing-site', severity: 'Medium', status: 'Open', owner: 'Unassigned', due: '2026-10-20', description: 'Several recommended browser security headers are not configured.', remediation: 'Add the agreed Content-Security-Policy and other required headers, then verify them against the deployed site.', notes: '' },
+  { id: 'VT-004', title: 'Public storage bucket permissions', asset: 'backup-storage', severity: 'High', status: 'In progress', owner: 'Elena Markova', due: '2026-10-13', description: 'Storage permissions allow broader access than required.', remediation: 'Disable public access, grant least-privilege access to approved service identities, and review access logs.', notes: '' },
+  { id: 'VT-005', title: 'Weak TLS configuration', asset: 'vpn-edge-02', severity: 'Medium', status: 'Resolved', owner: 'Maya Chen', due: '2026-10-09', description: 'The service accepted outdated TLS settings.', remediation: 'Keep deprecated TLS versions and weak cipher suites disabled, and verify the configuration during routine review.', notes: '' },
+  { id: 'VT-006', title: 'Unpatched Linux kernel', asset: 'worker-node-07', severity: 'Critical', status: 'Open', owner: 'Ivan Petrov', due: '2026-10-15', description: 'A security update is available for the kernel running on this worker node.', remediation: 'Apply the kernel update during the approved maintenance window, reboot if required, and confirm the running version.', notes: '' },
+  { id: 'VT-007', title: 'Verbose error messages', asset: 'internal-dashboard', severity: 'Low', status: 'Resolved', owner: 'Elena Markova', due: '2026-10-08', description: 'Error responses exposed implementation details.', remediation: 'Return generic error messages to clients and retain diagnostic details only in access-controlled logs.', notes: '' }
 ];
 
 const rows = document.querySelector('#finding-rows');
@@ -93,6 +93,7 @@ function showDetails(id) {
   document.querySelector('#detail-id').textContent = item.id;
   document.querySelector('#detail-title').textContent = item.title;
   document.querySelector('#detail-description').textContent = item.description;
+  document.querySelector('#detail-remediation').textContent = item.remediation || 'No remediation guidance recorded.';
   document.querySelector('#detail-severity').textContent = item.severity;
   document.querySelector('#detail-status').value = item.status;
   document.querySelector('#detail-asset').textContent = item.asset;
@@ -155,6 +156,7 @@ document.querySelector('#add-form').addEventListener('submit', event => {
     owner: String(data.get('owner')).trim() || 'Unassigned',
     due: String(data.get('due')),
     description: String(data.get('description')).trim(),
+    remediation: String(data.get('remediation')).trim(),
     notes: '',
     updated: todayDate()
   });
@@ -170,8 +172,8 @@ document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('c
 }));
 
 document.querySelector('#export-button').addEventListener('click', () => {
-  const headings = ['ID', 'Finding', 'Asset', 'Severity', 'Status', 'Owner', 'Due date', 'Last updated', 'Description', 'Notes'];
-  const csv = [headings, ...findings.map(item => [item.id, item.title, item.asset, item.severity, item.status, item.owner, formatDate(item.due), formatDate(item.updated), item.description, item.notes])]
+  const headings = ['ID', 'Finding', 'Asset', 'Severity', 'Status', 'Owner', 'Due date', 'Last updated', 'Description', 'Remediation', 'Notes'];
+  const csv = [headings, ...findings.map(item => [item.id, item.title, item.asset, item.severity, item.status, item.owner, formatDate(item.due), formatDate(item.updated), item.description, item.remediation, item.notes])]
     .map(line => line.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(',')).join('\r\n');
   const link = document.createElement('a');
   const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));

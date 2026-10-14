@@ -62,6 +62,7 @@
       <p class="eyebrow">FINDING DETAILS <span id="detail-id"></span></p>
       <h2 id="detail-title"></h2>
       <p id="detail-description" class="detail-description"></p>
+      <section class="detail-recommendation" aria-labelledby="detail-recommendation-heading"><h3 id="detail-recommendation-heading">Suggested remediation</h3><p id="detail-remediation" class="detail-description"></p></section>
       <dl class="detail-grid"><div><dt>Asset</dt><dd id="detail-asset"></dd></div><div><dt>Severity</dt><dd id="detail-severity"></dd></div></dl>
       <div class="form-grid">
         <label>Status<select id="detail-status" required><option>Open</option><option>In progress</option><option>Resolved</option></select></label>
@@ -84,6 +85,7 @@
         <label>Owner<input name="owner" type="text" maxlength="80" placeholder="Unassigned"></label>
         <label>Due date<input name="due" type="date"></label>
         <label class="full-width">Description<textarea name="description" rows="4" maxlength="2000" placeholder="Describe the finding and recommended remediation"></textarea></label>
+        <label class="full-width">Suggested remediation<textarea name="remediation" rows="3" maxlength="2000" placeholder="Describe a practical remediation action"></textarea></label>
       </div>
       <div class="dialog-actions"><button class="secondary-button" type="button" onclick="this.closest('dialog').close()">Cancel</button><button class="primary-button" type="submit">Save finding</button></div>
     </form>
