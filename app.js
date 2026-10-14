@@ -49,6 +49,7 @@ let findings = loadFindings();
 
 function saveFindings() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(findings));
+  updateDashboard();
 }
 
 function formatDate(value) {
@@ -161,7 +162,6 @@ document.querySelector('#detail-form').addEventListener('submit', event => {
   item.notes = document.querySelector('#detail-notes').value.trim();
   item.updated = todayDate();
   saveFindings();
-  updateDashboard();
   renderRows();
   detailDialog.close();
 });
@@ -195,7 +195,6 @@ addForm.addEventListener('submit', event => {
     updated: todayDate()
   });
   saveFindings();
-  updateDashboard();
   renderRows();
   form.reset();
   addDialog.close();
