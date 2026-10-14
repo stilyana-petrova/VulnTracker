@@ -6,3 +6,4 @@
 
 .detail-recommendation{padding:12px 14px;margin:0 0 18px;border:1px solid #e5eaf2;border-radius:7px;background:#f8faff}.detail-recommendation h3{font:700 11px Manrope,sans-serif;color:#344563;margin:0 0 6px}.detail-recommendation .detail-description{margin:0}
 .severity-counts button{font-family:inherit;border:0;cursor:pointer}.severity-counts button:focus-visible{outline:2px solid #4263eb;outline-offset:2px}
+.status{border:0;cursor:pointer;font:600 9px 'DM Sans',sans-serif}.status:focus-visible{outline:2px solid #4263eb;outline-offset:2px}
