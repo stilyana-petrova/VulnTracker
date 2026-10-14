@@ -68,7 +68,7 @@
         <label>Status<select id="detail-status" required><option>Open</option><option>In progress</option><option>Resolved</option></select></label>
         <label>Owner<input id="detail-owner" type="text" maxlength="80" placeholder="Unassigned"></label>
         <label>Due date<input id="detail-due" type="date"></label>
-        <label class="full-width">Remediation notes<textarea id="detail-notes" rows="4" maxlength="2000" placeholder="Record investigation or remediation updates"></textarea></label>
+        <label class="full-width">Remediation notes<textarea id="detail-notes" rows="4" maxlength="2000" aria-describedby="notes-count" placeholder="Record investigation or remediation updates"></textarea><small id="notes-count" class="field-hint" aria-live="polite">0 / 2000 characters</small></label>
       </div>
       <div class="dialog-actions"><button class="secondary-button" type="button" onclick="this.closest('dialog').close()">Cancel</button><button class="primary-button" type="submit">Save changes</button></div>
     </form>
